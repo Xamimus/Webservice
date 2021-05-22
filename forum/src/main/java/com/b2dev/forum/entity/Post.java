@@ -1,9 +1,11 @@
 package com.b2dev.forum.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 import javax.persistence.*;
 
@@ -24,5 +26,11 @@ public class Post {
   private Date createdAt;
 
   private Date updatedAt;
+
+  @OneToMany
+  private List<Report> reports = new ArrayList<>();
+
+  @ManyToOne
+  private User author;
 
 }

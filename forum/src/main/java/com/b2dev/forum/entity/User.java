@@ -1,5 +1,7 @@
 package com.b2dev.forum.entity;
 
+import java.util.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -22,4 +24,6 @@ public class User {
 
   private boolean locked;
 
+  @ManyToMany(fetch = FetchType.LAZY)
+  private Set<Role> roles = new HashSet<>();
 }

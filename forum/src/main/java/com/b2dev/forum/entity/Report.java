@@ -1,5 +1,7 @@
 package com.b2dev.forum.entity;
 
+import java.util.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -15,5 +17,11 @@ public class Report {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @ManyToOne
+  private User author;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  private Set<ReportReason> reason = new HashSet<>();
 
 }
