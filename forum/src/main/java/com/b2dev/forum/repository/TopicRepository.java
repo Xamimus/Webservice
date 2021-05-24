@@ -10,6 +10,4 @@ import com.b2dev.forum.entity.Topic;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
-
-
-  }
+}

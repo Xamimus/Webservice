@@ -21,7 +21,7 @@ public class Report {
   @ManyToOne
   private User author;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  private Set<ReportReason> reason = new HashSet<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  private ReportReason reason;
 
 }

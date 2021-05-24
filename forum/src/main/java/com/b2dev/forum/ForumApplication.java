@@ -1,5 +1,9 @@
 package com.b2dev.forum;
 
+import com.b2dev.forum.entity.*;
+import com.b2dev.forum.repository.*;
+import com.github.javafaker.Faker;
+import com.github.javafaker.Name;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,18 +11,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.*;
 
 @SpringBootApplication
 public class ForumApplication {
+
+	static Logger LOGGER = LoggerFactory.getLogger(ForumApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(ForumApplication.class, args);
@@ -27,12 +31,125 @@ public class ForumApplication {
 	@Value(value = "${populatedb}")
   	private boolean populatedb;
 
-	/**
-	 * Pour ce TP on autorise les requêtes cross domain car il est fort probable que le client REST tourne sur un autre
-	 * port de la machine.
-	 * 
-	 * @return un filtrage CORS
-	 */
+	@Value(value = "${usersToGenerate}")
+	private int usersToGenerate;
+
+	@Value(value = "${topicsToGenerate}")
+	private int topicsToGenerate;
+
+	@Value(value = "${minPostsPerTopicToGenerate}")
+	private int minPostsPerTopicToGenerate;
+
+	@Value(value = "${maxPostsPerTopicToGenerate}")
+	private int maxPostsPerTopicToGenerate;
+
+	@Autowired
+	private TopicRepository topicRepository;
+
+	@Autowired
+	private PostRepository postRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private ReportRepository reportRepository;
+
+	@Autowired
+	private ReportReasonRepository reportReasonRepository;
+
+	@Autowired
+	PasswordEncoder encoder;
+
+	@PostConstruct
+	private void init() {
+		if (populatedb) {
+			LOGGER.info("About to populate database from generated data");
+		} else {
+			LOGGER.info("Populate database at startup is disabled");
+			return;
+		}
+
+		Faker faker = new Faker(new Locale("fr"));
+
+		Role r = new Role();
+		r.setName(EnumRole.ROLE_USER);
+		Role userRole = roleRepository.save(r);
+		LOGGER.info("Generating " + userRepository + "users");
+		List<User> users = new ArrayList<>();
+		for (int x = 0; x < topicsToGenerate; x++) {
+			User u = new User();
+			u.setEmail(faker.internet().emailAddress());
+			u.setPassword(encoder.encode(faker.bothify("??##??##")));
+			Set<Role> roles = new HashSet<>();
+			roles.add(userRole);
+			u.setRoles(roles);
+			users.add(u);
+		}
+		userRepository.saveAll(users);
+
+
+		LOGGER.info("Generating " + topicsToGenerate + "topics");
+		long totalCategories = categoryRepository.count();
+		long totalUsers = userRepository.count();
+		List<Topic> topics = new ArrayList<>();
+		for (int x = 0; x < topicsToGenerate; x++) {
+			LOGGER.info("Generating between " + minPostsPerTopicToGenerate + " and " + maxPostsPerTopicToGenerate + " posts");
+			long totalReportReasons = reportReasonRepository.count();
+			List<Post> posts = new ArrayList<>();
+			int numPosts = new Random().nextInt(maxPostsPerTopicToGenerate - minPostsPerTopicToGenerate) + minPostsPerTopicToGenerate;
+			for (int i = 0; i < numPosts; i++) {
+				Post p = new Post();
+				p.setContent(faker.lorem().characters());
+				int randomAuthor = (int) (Math.random() * totalUsers);
+				p.setAuthor(userRepository.getById(randomAuthor));
+				Date start = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
+				Date end = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
+				p.setCreatedAt(faker.date().between(start, end));
+
+				// On ajoute de l'aléatoire sur la valeur de la date de mise à jour du post
+				int random = (int) (Math.random() * 4);
+				if (random == 1) {
+					p.setUpdatedAt(faker.date().between(start, end));
+				}
+
+				// On ajoute de l'aléatoire sur le nombre de report par Post
+				List<Report> reports = new ArrayList<>();
+				int randomReport = (int) (Math.random() * 4);
+				for (int j = 0; j < randomReport; j++) {
+					Report r = new Report();
+					int randomAuthorReport = (int) (Math.random() * totalUsers);
+					while (randomAuthor == randomAuthorReport) {
+						randomAuthorReport = (int) (Math.random() * totalUsers);
+					}
+					r.setAuthor(userRepository.getById(randomAuthorReport));
+					r.setReason(reportReasonRepository.getById((int) (Math.random() * totalReportReasons)));
+					reports.add(r);
+				}
+				reportRepository.saveAll(reports);
+				p.setReports(reports);
+				posts.add(p);
+			}
+			postRepository.saveAll(posts);
+
+			Name name = faker.name();
+			Topic t = new Topic();
+			t.setTitle(name.title());
+			t.setLocked(false);
+			t.setCategory(categoryRepository.getById((int) (Math.random() * totalCategories)));
+			t.setAuthor(userRepository.getById((int) (Math.random() * totalUsers)));
+			t.setPosts(posts);
+			topics.add(t);
+		}
+		topicRepository.saveAll(topics);
+	}
+
 	@Bean
 	public CorsFilter corsFilter() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
