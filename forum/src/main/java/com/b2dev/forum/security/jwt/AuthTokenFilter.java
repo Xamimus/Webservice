@@ -1,4 +1,4 @@
-package academy.campus.rest.security.jwt;
+package com.b2dev.forum.security.jwt;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import academy.campus.rest.security.service.UserDetailsServiceImpl;
+import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired

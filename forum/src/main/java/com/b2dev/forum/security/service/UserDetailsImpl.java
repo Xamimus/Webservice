@@ -1,4 +1,4 @@
-package academy.campus.rest.security.service;
+package com.b2dev.forum.security.service;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,12 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import academy.campus.rest.entity.User;
+import com.b2dev.forum.entity.User;
 
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
-  private Integer id;
+  private long id;
 
   private String email;
 
@@ -25,7 +25,7 @@ public class UserDetailsImpl implements UserDetails {
 
   private Collection<? extends GrantedAuthority> authorities = null;
 
-  public UserDetailsImpl(Integer id, String email, String password,
+  public UserDetailsImpl(long id, String email, String password,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.email = email;
@@ -45,7 +45,7 @@ public class UserDetailsImpl implements UserDetails {
     return authorities;
   }
 
-  public Integer getId() {
+  public long getId() {
     return id;
   }
 

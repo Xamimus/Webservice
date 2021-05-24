@@ -1,4 +1,4 @@
-package academy.campus.rest.security.service;
+package com.b2dev.forum.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import academy.campus.rest.entity.EnumRole;
-import academy.campus.rest.entity.User;
-import academy.campus.rest.repository.UserRepository;
+import com.b2dev.forum.entity.EnumRole;
+import com.b2dev.forum.entity.User;
+import com.b2dev.forum.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

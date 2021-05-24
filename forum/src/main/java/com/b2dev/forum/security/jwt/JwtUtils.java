@@ -1,4 +1,4 @@
-package academy.campus.rest.security.jwt;
+package com.b2dev.forum.security.jwt;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import academy.campus.rest.security.service.UserDetailsImpl;
+import com.b2dev.forum.security.service.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

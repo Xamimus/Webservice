@@ -1,4 +1,4 @@
-package academy.campus.rest.security;
+package com.b2dev.forum.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,9 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import academy.campus.rest.security.jwt.AuthEntryPointJwt;
-import academy.campus.rest.security.jwt.AuthTokenFilter;
-import academy.campus.rest.security.service.UserDetailsServiceImpl;
+import com.b2dev.forum.security.jwt.AuthEntryPointJwt;
+import com.b2dev.forum.security.jwt.AuthTokenFilter;
+import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
