@@ -20,4 +20,8 @@ public class ReportReason {
   @Column(length = 20)
   private EnumReportReason name;
 
+  public ReportReason(EnumReportReason name) {
+    this.name = name;
+  }
+
 }

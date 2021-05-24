@@ -87,18 +87,39 @@ public class ForumApplication {
 
 		Faker faker = new Faker(new Locale("fr"));
 
-		Role role = new Role();
-		role.setName(EnumRole.ROLE_USER);
-		Role userRole = roleRepository.save(role);
+		// Création des roles
+		List<Role> roles = new ArrayList<>();
+
+		for (EnumRole enumRole : EnumRole.values()) {
+			Role role = new Role();
+			role.setName(enumRole);
+			roles.add(role);
+		}
+		roleRepository.saveAll(roles);
+
+		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+
+		// Création des raisons de reports
+
+		List<ReportReason> reasons = new ArrayList<>();
+
+		for (EnumReportReason enumReason : EnumReportReason.values()) {
+			ReportReason reason = new ReportReason();
+			reason.setName(enumReason);
+			reasons.add(reason);
+		}
+		reportReasonRepository.saveAll(reasons);
+
+
 		LOGGER.info("Generating " + userRepository + "users");
 		List<User> users = new ArrayList<>();
 		for (int x = 0; x < usersToGenerate; x++) {
 			User u = new User();
 			u.setEmail(faker.internet().emailAddress());
 			u.setPassword(encoder.encode(faker.bothify("??##??##")));
-			Set<Role> roles = new HashSet<>();
+			Set<Role> userRoles = new HashSet<>();
 			roles.add(userRole);
-			u.setRoles(roles);
+			u.setRoles(userRoles);
 			users.add(u);
 		}
 		userRepository.saveAll(users);
