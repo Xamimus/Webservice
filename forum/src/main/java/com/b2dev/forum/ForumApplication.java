@@ -144,7 +144,7 @@ public class ForumApplication {
 			u.setEmail(faker.internet().emailAddress());
 			u.setPassword(encoder.encode(faker.bothify("??##??##")));
 			Set<Role> userRoles = new HashSet<>();
-			roles.add(userRole);
+			userRoles.add(userRole);
 			u.setRoles(userRoles);
 			users.add(u);
 		}
@@ -189,9 +189,9 @@ public class ForumApplication {
 				int randomReport = (int) (Math.random() * 4);
 				for (int j = 0; j < randomReport; j++) {
 					Report r = new Report();
-					long randomAuthorReport = (long) (Math.random() * totalUsers) + 1;;
+					long randomAuthorReport = (long) (Math.random() * totalUsers) + 1;
 					while (randomAuthor == randomAuthorReport) {
-						randomAuthorReport = (long) (Math.random() * totalUsers) + 1;;
+						randomAuthorReport = (long) (Math.random() * totalUsers) + 1;
 					}
 					r.setAuthor(userRepository.getById(randomAuthorReport));
 					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
