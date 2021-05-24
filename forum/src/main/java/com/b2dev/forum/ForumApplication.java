@@ -28,21 +28,6 @@ public class ForumApplication {
 		SpringApplication.run(ForumApplication.class, args);
 	}
 
-	@Value(value = "${populatedb}")
-  	private boolean populatedb;
-
-	@Value(value = "${usersToGenerate}")
-	private int usersToGenerate;
-
-	@Value(value = "${topicsToGenerate}")
-	private int topicsToGenerate;
-
-	@Value(value = "${minPostsPerTopicToGenerate}")
-	private int minPostsPerTopicToGenerate;
-
-	@Value(value = "${maxPostsPerTopicToGenerate}")
-	private int maxPostsPerTopicToGenerate;
-
 	@Autowired
 	private TopicRepository topicRepository;
 
@@ -65,7 +50,22 @@ public class ForumApplication {
 	private ReportReasonRepository reportReasonRepository;
 
 	@Autowired
-	PasswordEncoder encoder;
+	private PasswordEncoder encoder;
+
+	@Value(value = "${populatedb}")
+	private boolean populatedb;
+
+	@Value(value = "${usersToGenerate}")
+	private int usersToGenerate;
+
+	@Value(value = "${topicsToGenerate}")
+	private int topicsToGenerate;
+
+	@Value(value = "${minPostsPerTopicToGenerate}")
+	private int minPostsPerTopicToGenerate;
+
+	@Value(value = "${maxPostsPerTopicToGenerate}")
+	private int maxPostsPerTopicToGenerate;
 
 	@PostConstruct
 	private void init() {
@@ -78,12 +78,12 @@ public class ForumApplication {
 
 		Faker faker = new Faker(new Locale("fr"));
 
-		Role r = new Role();
-		r.setName(EnumRole.ROLE_USER);
-		Role userRole = roleRepository.save(r);
+		Role role = new Role();
+		role.setName(EnumRole.ROLE_USER);
+		Role userRole = roleRepository.save(role);
 		LOGGER.info("Generating " + userRepository + "users");
 		List<User> users = new ArrayList<>();
-		for (int x = 0; x < topicsToGenerate; x++) {
+		for (int x = 0; x < usersToGenerate; x++) {
 			User u = new User();
 			u.setEmail(faker.internet().emailAddress());
 			u.setPassword(encoder.encode(faker.bothify("??##??##")));
