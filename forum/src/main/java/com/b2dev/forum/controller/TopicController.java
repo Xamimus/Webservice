@@ -10,8 +10,14 @@ import com.b2dev.forum.repository.TopicRepository;
 
 
 @RestController
+@RequestMapping("topic")
 public class TopicController {
 
     @Autowired
     private TopicRepository topicRepository;
+
+    @GetMapping
+    public Page<Topic> getTopics(Pageable pageable) {
+        return topicRepository.findAll(pageable);
+    }
 }

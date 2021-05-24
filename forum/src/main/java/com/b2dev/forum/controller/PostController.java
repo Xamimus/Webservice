@@ -10,8 +10,14 @@ import com.b2dev.forum.repository.PostRepository;
 
 
 @RestController
+@RequestMapping("post")
 public class PostController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @GetMapping
+    public Page<Post> getPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
+    }
 }

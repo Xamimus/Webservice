@@ -10,8 +10,14 @@ import com.b2dev.forum.repository.RoleRepository;
 
 
 @RestController
+@RequestMapping("role")
 public class RoleController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @GetMapping
+    public Page<Role> getRoles(Pageable pageable) {
+        return roleRepository.findAll(pageable);
+    }
 }
