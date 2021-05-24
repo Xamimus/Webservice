@@ -20,4 +20,7 @@ public class Role {
   @Column(length = 20)
   private EnumRole name;
 
+  public Role(EnumRole name) {
+    this.name = name;
+  }
 }

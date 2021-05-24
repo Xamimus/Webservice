@@ -10,8 +10,14 @@ import com.b2dev.forum.repository.CategoryRepository;
 
 
 @RestController
+@RequestMapping("category")
 public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @GetMapping
+    public Page<Category> getCategories(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
 }
