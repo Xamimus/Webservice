@@ -21,7 +21,4 @@ public class Category {
 
   private String name;
 
-  @OneToMany
-  private List<Topic> topics = new ArrayList<>();
-
 }

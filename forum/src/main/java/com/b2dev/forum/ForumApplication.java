@@ -88,28 +88,54 @@ public class ForumApplication {
 		Faker faker = new Faker(new Locale("fr"));
 
 		// Création des roles
+		LOGGER.info("Generating roles");
 		List<Role> roles = new ArrayList<>();
 
-		for (EnumRole enumRole : EnumRole.values()) {
-			Role role = new Role();
-			role.setName(enumRole);
-			roles.add(role);
+		if (roleRepository.count() == 0) {
+			for (EnumRole enumRole : EnumRole.values()) {
+				Role role = new Role();
+				role.setName(enumRole);
+				roles.add(role);
+			}
+			roleRepository.saveAll(roles);
 		}
-		roleRepository.saveAll(roles);
 
 		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
 
 		// Création des raisons de reports
-
+		LOGGER.info("Generating report reasons");
 		List<ReportReason> reasons = new ArrayList<>();
-
-		for (EnumReportReason enumReason : EnumReportReason.values()) {
-			ReportReason reason = new ReportReason();
-			reason.setName(enumReason);
-			reasons.add(reason);
+		if (reportReasonRepository.count() == 0) {
+			for (EnumReportReason enumReason : EnumReportReason.values()) {
+				ReportReason reason = new ReportReason();
+				reason.setName(enumReason);
+				reasons.add(reason);
+			}
+			reportReasonRepository.saveAll(reasons);
 		}
-		reportReasonRepository.saveAll(reasons);
 
+		// Création des catégories
+		LOGGER.info("Generating categories");
+		List<Category> categories = new ArrayList<>();
+		if (categoryRepository.count() == 0) {
+			List<String> categoriesName = new ArrayList<String>();
+			categoriesName.add("Hardware");
+			categoriesName.add("Ordinateurs portables");
+			categoriesName.add("Overclocking, Cooling & Modding");
+			categoriesName.add("Technologies Mobiles");
+			categoriesName.add("Apple");
+			categoriesName.add("Video & Son");
+			categoriesName.add("Photo numérique");
+			categoriesName.add("Jeux video");
+			categoriesName.add("Windows & Software");
+
+			for (String category : categoriesName) {
+				Category newCategory = new Category();
+				newCategory.setName(category);
+				categories.add(newCategory);
+			}
+			categoryRepository.saveAll(categories);
+		}
 
 		LOGGER.info("Generating " + userRepository + "users");
 		List<User> users = new ArrayList<>();
@@ -144,7 +170,7 @@ public class ForumApplication {
 			int numPosts = new Random().nextInt(maxPostsPerTopicToGenerate - minPostsPerTopicToGenerate) + minPostsPerTopicToGenerate;
 			for (int i = 0; i < numPosts; i++) {
 				Post p = new Post();
-				p.setContent(faker.lorem().paragraph());
+				p.setContent(faker.lorem().sentence(15));
 				long randomAuthor = (long) (Math.random() * totalUsers) + 1;
 				p.setAuthor(userRepository.getById(randomAuthor));
 				Date start = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
