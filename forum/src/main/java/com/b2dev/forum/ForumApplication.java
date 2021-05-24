@@ -127,8 +127,17 @@ public class ForumApplication {
 		LOGGER.info("Generating " + topicsToGenerate + "topics");
 		long totalCategories = categoryRepository.count();
 		long totalUsers = userRepository.count();
-		List<Topic> topics = new ArrayList<>();
+
 		for (int x = 0; x < topicsToGenerate; x++) {
+
+			Name name = faker.name();
+			Topic t = new Topic();
+			t.setTitle(name.title());
+			t.setLocked(false);
+			t.setCategory(categoryRepository.getById((long) (Math.random() * totalCategories) + 1));
+			t.setAuthor(userRepository.getById((long) (Math.random() * totalUsers) + 1));
+			Topic topic = topicRepository.save(t);
+
 			LOGGER.info("Generating between " + minPostsPerTopicToGenerate + " and " + maxPostsPerTopicToGenerate + " posts");
 			long totalReportReasons = reportReasonRepository.count();
 			List<Post> posts = new ArrayList<>();
@@ -141,6 +150,7 @@ public class ForumApplication {
 				Date start = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
 				Date end = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
 				p.setCreatedAt(faker.date().between(start, end));
+				p.setTopic(topic);
 
 				// On ajoute de l'aléatoire sur la valeur de la date de mise à jour du post
 				int random = (int) (Math.random() * 4);
@@ -166,17 +176,7 @@ public class ForumApplication {
 				posts.add(p);
 			}
 			postRepository.saveAll(posts);
-
-			Name name = faker.name();
-			Topic t = new Topic();
-			t.setTitle(name.title());
-			t.setLocked(false);
-			t.setCategory(categoryRepository.getById((long) (Math.random() * totalCategories) + 1));
-			t.setAuthor(userRepository.getById((long) (Math.random() * totalUsers) + 1));
-			t.setPosts(posts);
-			topics.add(t);
 		}
-		topicRepository.saveAll(topics);
 	}
 
 	@Bean
