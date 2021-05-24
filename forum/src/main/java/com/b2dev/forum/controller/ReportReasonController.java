@@ -10,8 +10,14 @@ import com.b2dev.forum.repository.ReportReasonRepository;
 
 
 @RestController
+@RequestMapping("reportReason")
 public class ReportReasonController {
 
     @Autowired
     private ReportReasonRepository reportReasonRepository;
+
+    @GetMapping
+    public Page<ReportReason> getReportReasons(Pageable pageable) {
+        return reportReasonRepository.findAll(pageable);
+    }
 }

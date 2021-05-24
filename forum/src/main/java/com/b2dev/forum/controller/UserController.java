@@ -10,8 +10,14 @@ import com.b2dev.forum.repository.UserRepository;
 
 
 @RestController
+@RequestMapping("user")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @GetMapping
+    public Page<User> getUser(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 }

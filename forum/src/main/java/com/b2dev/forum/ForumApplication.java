@@ -4,6 +4,17 @@ import com.b2dev.forum.entity.*;
 import com.b2dev.forum.repository.*;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
+import com.b2dev.forum.entity.EnumRole;
+import com.b2dev.forum.entity.Role;
+import com.b2dev.forum.entity.User;
+import com.b2dev.forum.repository.RoleRepository;
+import com.b2dev.forum.repository.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 
 @SpringBootApplication
