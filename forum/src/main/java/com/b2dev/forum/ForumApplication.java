@@ -103,7 +103,6 @@ public class ForumApplication {
 		}
 		userRepository.saveAll(users);
 
-
 		LOGGER.info("Generating " + topicsToGenerate + "topics");
 		long totalCategories = categoryRepository.count();
 		long totalUsers = userRepository.count();
@@ -115,8 +114,8 @@ public class ForumApplication {
 			int numPosts = new Random().nextInt(maxPostsPerTopicToGenerate - minPostsPerTopicToGenerate) + minPostsPerTopicToGenerate;
 			for (int i = 0; i < numPosts; i++) {
 				Post p = new Post();
-				p.setContent(faker.lorem().characters());
-				int randomAuthor = (int) (Math.random() * totalUsers);
+				p.setContent(faker.lorem().paragraph());
+				long randomAuthor = (long) (Math.random() * totalUsers) + 1;
 				p.setAuthor(userRepository.getById(randomAuthor));
 				Date start = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
 				Date end = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
@@ -133,12 +132,12 @@ public class ForumApplication {
 				int randomReport = (int) (Math.random() * 4);
 				for (int j = 0; j < randomReport; j++) {
 					Report r = new Report();
-					int randomAuthorReport = (int) (Math.random() * totalUsers);
+					long randomAuthorReport = (long) (Math.random() * totalUsers) + 1;;
 					while (randomAuthor == randomAuthorReport) {
-						randomAuthorReport = (int) (Math.random() * totalUsers);
+						randomAuthorReport = (long) (Math.random() * totalUsers) + 1;;
 					}
 					r.setAuthor(userRepository.getById(randomAuthorReport));
-					r.setReason(reportReasonRepository.getById((int) (Math.random() * totalReportReasons)));
+					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
 					reports.add(r);
 				}
 				reportRepository.saveAll(reports);
@@ -151,8 +150,8 @@ public class ForumApplication {
 			Topic t = new Topic();
 			t.setTitle(name.title());
 			t.setLocked(false);
-			t.setCategory(categoryRepository.getById((int) (Math.random() * totalCategories)));
-			t.setAuthor(userRepository.getById((int) (Math.random() * totalUsers)));
+			t.setCategory(categoryRepository.getById((long) (Math.random() * totalCategories) + 1));
+			t.setAuthor(userRepository.getById((long) (Math.random() * totalUsers) + 1));
 			t.setPosts(posts);
 			topics.add(t);
 		}
