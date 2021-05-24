@@ -33,4 +33,7 @@ public class Post {
   @ManyToOne
   private User author;
 
+  @ManyToOne
+  private Topic topic;
+
 }
