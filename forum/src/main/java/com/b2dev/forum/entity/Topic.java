@@ -26,9 +26,6 @@ public class Topic {
   @ManyToOne
   private Category category;
 
-  @OneToMany
-  private List<Post> posts = new ArrayList<>();
-
   @ManyToOne
   private User author;
 
