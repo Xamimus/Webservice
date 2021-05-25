@@ -166,7 +166,6 @@ public class ForumApplication {
 
 			LOGGER.info("Generating between " + minPostsPerTopicToGenerate + " and " + maxPostsPerTopicToGenerate + " posts");
 			long totalReportReasons = reportReasonRepository.count();
-			List<Post> posts = new ArrayList<>();
 			int numPosts = new Random().nextInt(maxPostsPerTopicToGenerate - minPostsPerTopicToGenerate) + minPostsPerTopicToGenerate;
 			for (int i = 0; i < numPosts; i++) {
 				Post p = new Post();
@@ -184,6 +183,8 @@ public class ForumApplication {
 					p.setUpdatedAt(faker.date().between(start, end));
 				}
 
+				postRepository.save(p);
+
 				// On ajoute de l'aléatoire sur le nombre de report par Post
 				List<Report> reports = new ArrayList<>();
 				int randomReport = (int) (Math.random() * 4);
@@ -195,13 +196,11 @@ public class ForumApplication {
 					}
 					r.setAuthor(userRepository.getById(randomAuthorReport));
 					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
+					r.setPost(p);
 					reports.add(r);
 				}
 				reportRepository.saveAll(reports);
-				p.setReports(reports);
-				posts.add(p);
 			}
-			postRepository.saveAll(posts);
 		}
 	}
 
