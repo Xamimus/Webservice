@@ -2,8 +2,7 @@ package com.b2dev.forum.controller;
 
 import java.util.List;
 
-import com.b2dev.forum.entity.EnumRole;
-import com.b2dev.forum.entity.Post;
+import com.b2dev.forum.entity.*;
 import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import net.minidev.json.JSONObject;
 
-import com.b2dev.forum.entity.Topic;
 import com.b2dev.forum.repository.PostRepository;
 import com.b2dev.forum.repository.TopicRepository;
 
@@ -90,6 +88,14 @@ public class TopicController {
         return ResponseEntity.ok(topicRepository.save(updateTopic));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PutMapping("{id}/lock")
+    public ResponseEntity<?> toggleTopicLock (final @PathVariable("id") long topicId) {
+        Topic topic = topicRepository.getById(topicId);
+        topic.setLocked(!topic.isLocked());
+        return ResponseEntity.ok(topicRepository.save(topic));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteTopic(final @PathVariable("id") long topicId) {
         try{
@@ -105,6 +111,5 @@ public class TopicController {
         }
 
     }
-
 
 }
