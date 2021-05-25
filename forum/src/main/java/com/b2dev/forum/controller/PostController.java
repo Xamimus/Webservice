@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 
 
 @RestController
+@RequestMapping("post")
 public class PostController {
 
     @Autowired
@@ -39,19 +41,41 @@ public class PostController {
         return postRepository.findAll(pageable);
     }
 
-    @PostMapping("/post")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PostMapping
     public ResponseEntity<Post> addPost(@RequestBody Post post) {
-        if (UserDetailsServiceImpl.getCurrentUser() != null) {
+        //On vérifie que le User n'est pas bloqué
+        if (!UserDetailsServiceImpl.getCurrentUser().isLocked()) {
             Post postToSave = new Post();
             postToSave.setAuthor(UserDetailsServiceImpl.getCurrentUser());
             postToSave.setContent(post.getContent());
             postToSave.setCreatedAt(new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime());
             Topic topic = topicRepository.findById(post.getTopic().getId());
-            postToSave.setTopic(topic);
-            return ResponseEntity.ok(postRepository.save(postToSave));
+
+            //On vérifie que le Topic n'est pas bloqué
+            if(!topic.isLocked())
+            {
+                postToSave.setTopic(topic);
+                return ResponseEntity.ok(postRepository.save(postToSave));
+            }
+            return ResponseEntity.status(403).build();
+        } 
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> adminDeletePost(final @PathVariable("id") Integer postId) {
+      try {
+        if (UserDetailsServiceImpl.isAdmin()) {
+          long totalBeforeDelete = postRepository.count();
+          postRepository.delete(postRepository.findById(postId).get());
+          return ResponseEntity.ok(totalBeforeDelete > postRepository.count());
         } else {
-            return ResponseEntity.badRequest().build();
+          return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
         }
+      } catch (Exception e) {
+        return ResponseEntity.badRequest().build();
+      }
     }
 
 }

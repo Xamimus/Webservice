@@ -83,12 +83,25 @@ public class ForumApplication {
 		} else {
 			LOGGER.info("Populate database at startup is disabled");
 			return;
-		}
+		}	
+	
+
+		Faker faker = new Faker(new Locale("fr"));
 
 		// Création des roles
-		Role adminRole = roleRepository.save(new Role(EnumRole.ROLE_ADMIN));
-		roleRepository.save(new Role(EnumRole.ROLE_USER));
-	
+		LOGGER.info("Generating roles");
+		List<Role> roles = new ArrayList<>();
+
+		if (roleRepository.count() == 0) {
+			for (EnumRole enumRole : EnumRole.values()) {
+				Role role = new Role();
+				role.setName(enumRole);
+				roles.add(role);
+			}
+			roleRepository.saveAll(roles);
+		}
+
+		Role adminRole = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
 		if (userRepository.count() == 0)
 		{
 			// Création d'un utilisateur spécial ayant le rôle d'Administrateur,
@@ -114,23 +127,7 @@ public class ForumApplication {
 			userRepository.save(anonymous);
 		}
 
-		Faker faker = new Faker(new Locale("fr"));
-
-		// Création des roles
-		LOGGER.info("Generating roles");
-		List<Role> roles = new ArrayList<>();
-
-		if (roleRepository.count() == 0) {
-			for (EnumRole enumRole : EnumRole.values()) {
-				Role role = new Role();
-				role.setName(enumRole);
-				roles.add(role);
-			}
-			roleRepository.saveAll(roles);
-		}
-
 		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
-
 		// Création des raisons de reports
 		LOGGER.info("Generating report reasons");
 		List<ReportReason> reasons = new ArrayList<>();

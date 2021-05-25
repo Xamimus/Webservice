@@ -15,5 +15,4 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
   Report getById(Long id);
 
-  List<Report> findByPost(Post post);
   }

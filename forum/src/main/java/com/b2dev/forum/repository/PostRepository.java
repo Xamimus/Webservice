@@ -14,4 +14,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
   Post getById(Long id);
 
+  
   }
