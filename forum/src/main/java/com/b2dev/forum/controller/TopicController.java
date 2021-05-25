@@ -1,14 +1,21 @@
 package com.b2dev.forum.controller;
 
+import java.util.List;
+
 import com.b2dev.forum.entity.EnumRole;
+import com.b2dev.forum.entity.Post;
 import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import net.minidev.json.JSONObject;
+
 import com.b2dev.forum.entity.Topic;
+import com.b2dev.forum.repository.PostRepository;
 import com.b2dev.forum.repository.TopicRepository;
 
 @RestController
@@ -18,6 +25,9 @@ public class TopicController {
     @Autowired
     private TopicRepository topicRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     @ResponseBody
     @GetMapping
     public Page<Topic> getTopics(Pageable pageable) {
@@ -26,14 +36,15 @@ public class TopicController {
 
     @ResponseBody
     @GetMapping("{id}")
-    public Topic getTopicById(final @PathVariable("id") String topicId) {
+    public ResponseEntity<?> getTopicById(final @PathVariable("id") long topicId, Pageable pageable) {
         try {
-            Topic topic = topicRepository.findById(Long.parseLong(topicId));
-            System.out.println(topic);
-            return topic;
+            Topic topic = topicRepository.findById(topicId);
+            List<Post> posts = postRepository.findByTopicId(topicId);
+            topic.setPosts(posts);
+            return ResponseEntity.ok(topic);
         } catch (Exception e) {
             System.out.println(e);
-            return null;
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -58,7 +69,7 @@ public class TopicController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     @ResponseBody
     @PutMapping("{id}")
-    public Topic editTopic(final @RequestBody Topic topic, @PathVariable Long id) {
+    public Topic editTopic(final @RequestBody Topic topic, @PathVariable long id) {
         Topic updateTopic = topicRepository.findById(id);
         updateTopic.setLocked(topic.isLocked());
         if(topic.getTitle() != null){
@@ -78,9 +89,9 @@ public class TopicController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteTopic(final @PathVariable("id") Integer topicId) {
+    public void deleteTopic(final @PathVariable("id") long topicId) {
         try{
-            Topic topic = topicRepository.findById(topicId).get();
+            Topic topic = topicRepository.findById(topicId);
             if(UserDetailsServiceImpl.getCurrentUser() == topic.getAuthor() && topic.getPosts().size() > 0){
                 topicRepository.deleteById(topicId);
             }else{

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
+
 /**
  * Entité Topic persistente en base de données.
  */
