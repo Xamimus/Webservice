@@ -83,8 +83,8 @@ public class ForumApplication {
 		} else {
 			LOGGER.info("Populate database at startup is disabled");
 			return;
-		}	
-	
+		}
+
 
 		Faker faker = new Faker(new Locale("fr"));
 
@@ -199,7 +199,7 @@ public class ForumApplication {
 				long randomAuthor = (long) (Math.random() * totalUsers) + 1;
 				p.setAuthor(userRepository.getById(randomAuthor));
 				Date start = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
-				Date end = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
+				Date end = new GregorianCalendar(2021, Calendar.DECEMBER, 30).getTime();
 				p.setCreatedAt(faker.date().between(start, end));
 				p.setTopic(topic);
 
@@ -225,7 +225,7 @@ public class ForumApplication {
 				}
 				reportRepository.saveAll(reports);
 			}
-			
+
 		}
 	}
 
