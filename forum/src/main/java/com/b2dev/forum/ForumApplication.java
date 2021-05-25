@@ -85,6 +85,35 @@ public class ForumApplication {
 			return;
 		}
 
+		// Création des roles
+		Role adminRole = roleRepository.save(new Role(EnumRole.ROLE_ADMIN));
+		roleRepository.save(new Role(EnumRole.ROLE_USER));
+	
+		if (userRepository.count() == 0)
+		{
+			// Création d'un utilisateur spécial ayant le rôle d'Administrateur,
+			// seule personne habilitée à créer par la suite des entités comme Artist et Album
+			User admin = new User();
+			admin.setEmail("admin@test");
+			admin.setPassword(encoder.encode("1234"));
+			Set<Role> adminRoles = new HashSet<>();
+			adminRoles.add(adminRole);
+			admin.setRoles(adminRoles);
+			userRepository.save(admin);
+
+			// Création d'un utilisateur anonyme à des fins de test
+			User anonymous = new User();
+			anonymous.setEmail("anonymous@test");
+			anonymous.setPassword(encoder.encode("1234"));
+
+			Role anonymousRole = roleRepository.save(new Role(EnumRole.ROLE_ANONYMOUS));
+
+			Set<Role> anonymousRoles = new HashSet<>();
+			anonymousRoles.add(anonymousRole);
+			anonymous.setRoles(anonymousRoles);
+			userRepository.save(anonymous);
+		}
+
 		Faker faker = new Faker(new Locale("fr"));
 
 		// Création des roles
