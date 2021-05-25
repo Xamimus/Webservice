@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import com.b2dev.forum.entity.Topic;
 import com.b2dev.forum.repository.TopicRepository;
 
-import java.util.Optional;
-
-
 @RestController
 @RequestMapping("/topic")
 public class TopicController {
