@@ -3,6 +3,7 @@ package com.b2dev.forum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.b2dev.forum.entity.Post;
@@ -32,6 +33,7 @@ public class ReportController {
         return reportRepository.findAll(pageable);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
     @PostMapping
     public Report addReport(@RequestBody Report report) {
         Report reportToSave = new Report();
