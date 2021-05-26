@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -66,12 +67,15 @@ public class AuthController {
       String jwt = jwtUtils.generateJwtToken(authentication);
 
       UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      
       List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
           .collect(Collectors.toList());
 
-      return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
-    } catch (AuthenticationException e) {
-      return ResponseEntity.ok(new MessageResponse(ApiMessage.ERROR_LOGIN_FAILED, "Identifiants invalides"));
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
+    } catch (LockedException e) {
+      return ResponseEntity.ok(new MessageResponse(ApiMessage.ERROR_ACCOUNT_LOCKED, "Oups, votre compte a été bloqué !"));
+    } catch (AuthenticationException e){
+      return ResponseEntity.ok(new MessageResponse(ApiMessage.ERROR_LOGIN_FAILED, "Vos identifiants sont invalides"));
     }
   }
 

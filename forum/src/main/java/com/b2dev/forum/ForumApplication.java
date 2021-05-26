@@ -85,6 +85,7 @@ public class ForumApplication {
 			return;
 		}
 
+
 		Faker faker = new Faker(new Locale("fr"));
 
 		// Création des roles
@@ -100,8 +101,45 @@ public class ForumApplication {
 			roleRepository.saveAll(roles);
 		}
 
+		Role adminRole = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
 		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+		if (userRepository.count() == 0)
+		{
+			// Création d'un utilisateur spécial ayant le rôle d'Administrateur,
+			// seule personne habilitée à créer par la suite des entités comme Artist et Album
+			User admin = new User();
+			admin.setEmail("admin@test");
+			admin.setPassword(encoder.encode("1234"));
+			Set<Role> adminRoles = new HashSet<>();
+			adminRoles.add(adminRole);
+			admin.setRoles(adminRoles);
+			userRepository.save(admin);
 
+			// Création d'un utilisateur anonyme à des fins de test
+			User anonymous = new User();
+			anonymous.setEmail("anonymous@test");
+			anonymous.setPassword(encoder.encode("1234"));
+
+			Role anonymousRole = roleRepository.save(new Role(EnumRole.ROLE_ANONYMOUS));
+
+			Set<Role> anonymousRoles = new HashSet<>();
+			anonymousRoles.add(anonymousRole);
+			anonymous.setRoles(anonymousRoles);
+			userRepository.save(anonymous);
+
+			// Création d'un User à des fins de test
+			User simpleUser = new User();
+			simpleUser.setEmail("user@test");
+			simpleUser.setPassword(encoder.encode("1234"));
+
+			Role simpleUserRole = roleRepository.save(new Role(EnumRole.ROLE_USER));
+			Set<Role> simpleUserRoles = new HashSet<>();
+			simpleUserRoles.add(simpleUserRole);
+			simpleUser.setRoles(simpleUserRoles);
+			userRepository.save(simpleUser);
+		}
+
+		
 		// Création des raisons de reports
 		LOGGER.info("Generating report reasons");
 		List<ReportReason> reasons = new ArrayList<>();
@@ -173,7 +211,7 @@ public class ForumApplication {
 				long randomAuthor = (long) (Math.random() * totalUsers) + 1;
 				p.setAuthor(userRepository.getById(randomAuthor));
 				Date start = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
-				Date end = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
+				Date end = new GregorianCalendar(2021, Calendar.DECEMBER, 30).getTime();
 				p.setCreatedAt(faker.date().between(start, end));
 				p.setTopic(topic);
 
@@ -182,9 +220,7 @@ public class ForumApplication {
 				if (random == 1) {
 					p.setUpdatedAt(faker.date().between(start, end));
 				}
-
 				postRepository.save(p);
-
 				// On ajoute de l'aléatoire sur le nombre de report par Post
 				List<Report> reports = new ArrayList<>();
 				int randomReport = (int) (Math.random() * 4);
@@ -194,6 +230,7 @@ public class ForumApplication {
 					while (randomAuthor == randomAuthorReport) {
 						randomAuthorReport = (long) (Math.random() * totalUsers) + 1;
 					}
+					r.setPost(p);
 					r.setAuthor(userRepository.getById(randomAuthorReport));
 					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
 					r.setPost(p);

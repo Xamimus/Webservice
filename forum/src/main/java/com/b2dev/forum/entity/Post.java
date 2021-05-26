@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Entité Post persistente en base de données.
  */
@@ -30,6 +33,7 @@ public class Post {
   @ManyToOne
   private User author;
 
+  @JsonBackReference
   @ManyToOne
   private Topic topic;
 
