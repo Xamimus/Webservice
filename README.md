@@ -49,7 +49,7 @@ Lancer le projet
 
 Les tables ainsi que leur descriptions sont automatiquement importées dans la base de données "webservice"
 
-Un jeu de fausses données est également importé
+Un jeu de fausses données est également importé, remplissant la base de données avec des entités semblant réalistes, à l'aide du composant Faker.
 
 ## Comptes mis à disposition
 
@@ -60,6 +60,12 @@ Les mots de passes pour les 4 comptes sont : '1234'
 - User : user@test
 - Modérateur : moderator@test
 - Admin : admin@test
+
+## Token JWT
+
+La connexion vous mettra à disposition un Token JWT permettant l'authentification.
+
+Pour les besoins du test, l'expiration des tokens a été considérablement rallongée, afin de faciliter les requêtes de notre collection Postman.
 
 ### Importer un fichier JSON sur Postman
 
