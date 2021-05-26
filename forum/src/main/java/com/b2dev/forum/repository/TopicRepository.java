@@ -11,6 +11,8 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     Topic getById(Long id);
 
+
+
     Topic findById(long id);
 
 }

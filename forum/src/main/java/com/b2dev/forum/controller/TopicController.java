@@ -1,16 +1,22 @@
 package com.b2dev.forum.controller;
 
 import com.b2dev.forum.entity.EnumRole;
+import com.b2dev.forum.entity.Post;
 import com.b2dev.forum.security.service.UserDetailsServiceImpl;
+import net.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.b2dev.forum.entity.Topic;
 import com.b2dev.forum.repository.TopicRepository;
+import com.b2dev.forum.repository.PostRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,6 +27,9 @@ public class TopicController {
     @Autowired
     private TopicRepository topicRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     @ResponseBody
     @GetMapping
     public Page<Topic> getTopics(Pageable pageable) {
@@ -29,10 +38,14 @@ public class TopicController {
 
     @ResponseBody
     @GetMapping("{id}")
-    public Topic getTopicById(final @PathVariable("id") String topicId) {
+    public Topic getTopicById(final @PathVariable("id") String topicId, Pageable pageable) {
         try {
             Topic topic = topicRepository.findById(Long.parseLong(topicId));
-            System.out.println(topic);
+            pageable = PageRequest.of(0, 3, Sort.by( Sort.Direction.DESC, "createdAt"));
+
+            List<Post> posts = postRepository.findAllByTopicId(Long.parseLong(topicId), pageable);
+            System.out.println(posts);
+            topic.setPosts(posts);
             return topic;
         } catch (Exception e) {
             System.out.println(e);
@@ -47,6 +60,7 @@ public class TopicController {
         topicToSave.setPosts(topic.getPosts());
         topicToSave.setAuthor(topic.getAuthor());
         topicToSave.setLocked(false);
+        topicToSave.setCategory(topic.getCategory());
         if(topicToSave.getTitle() == null){
             return null;
         }
