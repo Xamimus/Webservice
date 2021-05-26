@@ -102,6 +102,9 @@ public class ForumApplication {
 		}
 
 		Role adminRole = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
+		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+		Role moderatorRole = roleRepository.findByName(EnumRole.ROLE_MODERATOR).get();
+		Role anonymousRole = roleRepository.findByName(EnumRole.ROLE_ANONYMOUS).get();
 		if (userRepository.count() == 0)
 		{
 			// Création d'un utilisateur spécial ayant le rôle d'Administrateur,
@@ -119,15 +122,34 @@ public class ForumApplication {
 			anonymous.setEmail("anonymous@test");
 			anonymous.setPassword(encoder.encode("1234"));
 
-			Role anonymousRole = roleRepository.save(new Role(EnumRole.ROLE_ANONYMOUS));
 
 			Set<Role> anonymousRoles = new HashSet<>();
 			anonymousRoles.add(anonymousRole);
 			anonymous.setRoles(anonymousRoles);
 			userRepository.save(anonymous);
+
+			// Création d'un User à des fins de test
+			User simpleUser = new User();
+			simpleUser.setEmail("user@test");
+			simpleUser.setPassword(encoder.encode("1234"));
+
+			Role simpleUserRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+			Set<Role> simpleUserRoles = new HashSet<>();
+			simpleUserRoles.add(simpleUserRole);
+			simpleUser.setRoles(simpleUserRoles);
+			userRepository.save(simpleUser);
+
+			//Création d'un modérateur à des fins de test
+			User moderator = new User();
+			moderator.setEmail("moderator@test");
+			moderator.setPassword(encoder.encode("1234"));
+			Set<Role> moderatorRoles = new HashSet<>();
+			moderatorRoles.add(moderatorRole);
+			moderator.setRoles(moderatorRoles);
+			userRepository.save(moderator);
 		}
 
-		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+		
 		// Création des raisons de reports
 		LOGGER.info("Generating report reasons");
 		List<ReportReason> reasons = new ArrayList<>();
@@ -221,11 +243,11 @@ public class ForumApplication {
 					r.setPost(p);
 					r.setAuthor(userRepository.getById(randomAuthorReport));
 					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
+					r.setPost(p);
 					reports.add(r);
 				}
 				reportRepository.saveAll(reports);
 			}
-
 		}
 	}
 
