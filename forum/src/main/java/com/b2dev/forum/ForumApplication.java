@@ -243,11 +243,11 @@ public class ForumApplication {
 					r.setPost(p);
 					r.setAuthor(userRepository.getById(randomAuthorReport));
 					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
+					r.setPost(p);
 					reports.add(r);
 				}
 				reportRepository.saveAll(reports);
 			}
-
 		}
 	}
 
