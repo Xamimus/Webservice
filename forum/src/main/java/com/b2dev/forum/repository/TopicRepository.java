@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.b2dev.forum.entity.Topic;
 
+import java.util.List;
+
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
@@ -16,5 +18,6 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
     Void deleteById(long id);
 
+    List<Topic> findTop5ByOrderByIdDesc();
 
 }
