@@ -3,7 +3,10 @@ package com.b2dev.forum.repository;
 
 import java.util.*;
 
+import com.b2dev.forum.entity.ReportReason;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

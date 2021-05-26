@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import com.b2dev.forum.repository.PostRepository;
 
 
 /**
@@ -32,6 +33,7 @@ public class Topic {
 
   @OneToMany
   private List<Post> posts;
+
 
   public User getAuthor() {
     return author;
