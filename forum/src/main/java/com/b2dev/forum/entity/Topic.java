@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import com.b2dev.forum.repository.PostRepository;
 
+
 /**
  * Entité Topic persistente en base de données.
  */

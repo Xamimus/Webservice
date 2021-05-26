@@ -1,18 +1,31 @@
 package com.b2dev.forum.controller;
 
+<<<<<<< HEAD
 import com.b2dev.forum.entity.EnumRole;
 import com.b2dev.forum.entity.Post;
+=======
+import java.util.List;
+
+import com.b2dev.forum.entity.*;
+>>>>>>> main
 import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 import net.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+<<<<<<< HEAD
 import org.springframework.data.domain.Sort;
+=======
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+>>>>>>> main
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.b2dev.forum.entity.Topic;
+import net.minidev.json.JSONObject;
+
+import com.b2dev.forum.repository.PostRepository;
 import com.b2dev.forum.repository.TopicRepository;
 import com.b2dev.forum.repository.PostRepository;
 
@@ -36,46 +49,42 @@ public class TopicController {
         return topicRepository.findAll(pageable);
     }
 
+    // Exemples:
+    // localhost:8080/topic/1
+    // localhost:8080/topic/1?page=1
     @ResponseBody
     @GetMapping("{id}")
-    public Topic getTopicById(final @PathVariable("id") String topicId, Pageable pageable) {
+    public ResponseEntity<?> getTopicById(final @PathVariable("id") long topicId, @RequestParam(value = "page", defaultValue="0") int page) {
         try {
-            Topic topic = topicRepository.findById(Long.parseLong(topicId));
-            pageable = PageRequest.of(0, 3, Sort.by( Sort.Direction.DESC, "createdAt"));
-
-            List<Post> posts = postRepository.findAllByTopicId(Long.parseLong(topicId), pageable);
-            System.out.println(posts);
+            Pageable pageable = PageRequest.of(page, 5);
+            Topic topic = topicRepository.findById(topicId);
+            List<Post> posts = postRepository.findByTopicIdOrderByCreatedAtDesc(topicId, pageable);
             topic.setPosts(posts);
-            return topic;
+            return ResponseEntity.ok(topic);
         } catch (Exception e) {
-            System.out.println(e);
-            return null;
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping("")
-    public Topic addTopic(@RequestBody Topic topic) {
+    public ResponseEntity<Topic> addTopic(@RequestBody Topic topic) {
         Topic topicToSave = new Topic();
         topicToSave.setTitle(topic.getTitle());
         topicToSave.setPosts(topic.getPosts());
         topicToSave.setAuthor(topic.getAuthor());
         topicToSave.setLocked(false);
-        topicToSave.setCategory(topic.getCategory());
-        if(topicToSave.getTitle() == null){
-            return null;
-        }
-        if(topicToSave.getPosts().size() < 1){
-            return null;
+        if(topicToSave.getTitle() == null || topicToSave.getPosts().size() < 1){
+            return ResponseEntity.badRequest().build();
         }
         topicToSave = topicRepository.save(topicToSave);
-        return topicToSave;
+        return ResponseEntity.ok(topicToSave);
     }
 
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     @ResponseBody
     @PutMapping("{id}")
-    public Topic editTopic(final @RequestBody Topic topic, @PathVariable Long id) {
+    public ResponseEntity<Topic> editTopic(final @RequestBody Topic topic, @PathVariable long id) {
         Topic updateTopic = topicRepository.findById(id);
         updateTopic.setLocked(topic.isLocked());
         if(topic.getTitle() != null){
@@ -91,23 +100,31 @@ public class TopicController {
             updateTopic.setPosts(topic.getPosts());
         }
 
-        return topicRepository.save(updateTopic);
+        return ResponseEntity.ok(topicRepository.save(updateTopic));
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PutMapping("{id}/lock")
+    public ResponseEntity<?> toggleTopicLock (final @PathVariable("id") long topicId) {
+        Topic topic = topicRepository.getById(topicId);
+        topic.setLocked(!topic.isLocked());
+        return ResponseEntity.ok(topicRepository.save(topic));
     }
 
     @DeleteMapping("{id}")
-    public void deleteTopic(final @PathVariable("id") Integer topicId) {
+    public ResponseEntity<?> deleteTopic(final @PathVariable("id") long topicId) {
         try{
-            Topic topic = topicRepository.findById(topicId).get();
+            Topic topic = topicRepository.findById(topicId);
             if(UserDetailsServiceImpl.getCurrentUser() == topic.getAuthor() && topic.getPosts().size() > 0){
                 topicRepository.deleteById(topicId);
+                return ResponseEntity.ok().build();
             }else{
-                System.out.println("user is not the creator or the topic contains more than one post");
+                return new ResponseEntity<>("User is not the creator or the topic contains more than one post", HttpStatus.FORBIDDEN);
             }
         }catch(Exception e){
-            System.out.println(e);
+            return ResponseEntity.badRequest().build();
         }
 
     }
-
 
 }

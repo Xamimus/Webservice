@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import com.b2dev.forum.entity.EnumRole;
 import com.b2dev.forum.entity.Post;
@@ -59,7 +56,21 @@ public class PostController {
                 return ResponseEntity.ok(postRepository.save(postToSave));
             }
             return ResponseEntity.status(403).build();
-        } 
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PutMapping("{id}")
+    public ResponseEntity<?> editPost(final @RequestBody Post post, final @PathVariable("id") long postId) {
+        Post updatePost = postRepository.findById(postId);
+        if (post.getAuthor() == updatePost.getAuthor() || UserDetailsServiceImpl.isAdmin() || UserDetailsServiceImpl.isModerator()) {
+            if (post.getContent() != null) {
+                updatePost.setContent(post.getContent());
+            }
+            updatePost.setUpdatedAt(new Date());
+            return ResponseEntity.ok(postRepository.save(post));
+        }
         return ResponseEntity.badRequest().build();
     }
 
