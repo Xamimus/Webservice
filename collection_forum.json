@@ -1,0 +1,628 @@
+{
+	"info": {
+		"_postman_id": "ab3d341b-d46b-400c-b5a1-e416cbca579a",
+		"name": "WebService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Topic",
+			"item": [
+				{
+					"name": "Get Topics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "YZw8xMJbrg#bZclLS7r?_EM5Wh_@45%L3V^bfskZG@1R9ILROc6vTq-=X9_cE!@7?ILLrI3fUs5gQXIDqw6Arhz|Ej4+rq|1=_dG|6Mwld44jVci7sc#Mc4WrEc&3Wf-",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/topic",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"topic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Topic By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "YZw8xMJbrg#bZclLS7r?_EM5Wh_@45%L3V^bfskZG@1R9ILROc6vTq-=X9_cE!@7?ILLrI3fUs5gQXIDqw6Arhz|Ej4+rq|1=_dG|6Mwld44jVci7sc#Mc4WrEc&3Wf-",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/topic/1?page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"topic",
+								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Topic",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/topic/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"topic",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Lock Topic",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"locked\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/topic/2/lock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"topic",
+								"2",
+								"lock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Topic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"nouveau topic test\",\r\n    \"locked\": false,\r\n    \"category\": {\"id\": 3},\r\n    \"author\": {\"id\": 2},\r\n    \"posts\": [{\"id\": 4}, {\"id\": 5}]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/topic",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"topic"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "Delete Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/post/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"post",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"Post modifié\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/post/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"post",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIxOTM2MDA4LCJleHAiOjE2MjIwMjI0MDh9.AsGy57PZsCFjgMiQEbTQ_1i6TZ-bHR-TTzyix23aq-oecCtTGu9eZLuE2_0kv0B9dmVPELs4NtHG8p4DpNwd2A",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"topic\": {\"id\": 1},\r\n    \"content\": \"Voici un nouveau post\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/post",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login (admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@test\",\r\n    \"password\": \"1234\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@test\",\r\n    \"password\": \"1234\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (anonymous test)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"anonymous@test\",\r\n    \"password\": \"1234\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Toggle Lock User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/user/8/lock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"8",
+								"lock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Moderator Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/9/moderator",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"9",
+								"moderator"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Home",
+			"item": [
+				{
+					"name": "Get Home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "Post Report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIxOTUyOTg2LCJleHAiOjE2MjIwMzkzODZ9.q761PxHcoTunffTAKcEvDckRgzG1MWPpDR38OH8HWGk3O-xncUVLz5dsAIYLtMp4imwr54y86E5EqI2tfa5Prw",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"reason\": { \"id\": 3 },\r\n    \"post\": { \"id\": 4 }\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/report",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Request Reason",
+			"item": [
+				{
+					"name": "Get Reports Reasons",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/reportReason",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reportReason"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Role",
+			"item": [
+				{
+					"name": "Get Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0IiwiaWF0IjoxNjIyMDI1NjM2LCJleHAiOjMyNDA1NDI5NTN9.mJ4AqNGZuQTwO0Cx-gZPl-nNc5hQMqUa6UcBa07p98J7rpe2AJx5llaOgd58OGa5i01iSSLjPERo0PjSYWzWDw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/reportReason",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reportReason"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
