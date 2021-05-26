@@ -24,4 +24,7 @@ public class Report {
   @ManyToOne(fetch = FetchType.LAZY)
   private ReportReason reason;
 
+  @ManyToOne
+  private Post post;
+
 }

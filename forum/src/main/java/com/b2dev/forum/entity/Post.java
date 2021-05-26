@@ -27,9 +27,6 @@ public class Post {
 
   private Date updatedAt;
 
-  @OneToMany
-  private List<Report> reports = new ArrayList<>();
-
   @ManyToOne
   private User author;
 

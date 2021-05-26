@@ -77,7 +77,7 @@ public class TopicController {
     @PutMapping("{id}")
     public Topic editTopic(final @RequestBody Topic topic, @PathVariable Long id) {
         Topic updateTopic = topicRepository.findById(id);
-        updateTopic.setLocked(topic.getLocked());
+        updateTopic.setLocked(topic.isLocked());
         if(topic.getTitle() != null){
             updateTopic.setTitle(topic.getTitle());
         }

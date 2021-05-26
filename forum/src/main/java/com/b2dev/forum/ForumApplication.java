@@ -83,7 +83,8 @@ public class ForumApplication {
 		} else {
 			LOGGER.info("Populate database at startup is disabled");
 			return;
-		}
+		}	
+	
 
 		Faker faker = new Faker(new Locale("fr"));
 
@@ -100,8 +101,33 @@ public class ForumApplication {
 			roleRepository.saveAll(roles);
 		}
 
-		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+		Role adminRole = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
+		if (userRepository.count() == 0)
+		{
+			// Création d'un utilisateur spécial ayant le rôle d'Administrateur,
+			// seule personne habilitée à créer par la suite des entités comme Artist et Album
+			User admin = new User();
+			admin.setEmail("admin@test");
+			admin.setPassword(encoder.encode("1234"));
+			Set<Role> adminRoles = new HashSet<>();
+			adminRoles.add(adminRole);
+			admin.setRoles(adminRoles);
+			userRepository.save(admin);
 
+			// Création d'un utilisateur anonyme à des fins de test
+			User anonymous = new User();
+			anonymous.setEmail("anonymous@test");
+			anonymous.setPassword(encoder.encode("1234"));
+
+			Role anonymousRole = roleRepository.save(new Role(EnumRole.ROLE_ANONYMOUS));
+
+			Set<Role> anonymousRoles = new HashSet<>();
+			anonymousRoles.add(anonymousRole);
+			anonymous.setRoles(anonymousRoles);
+			userRepository.save(anonymous);
+		}
+
+		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
 		// Création des raisons de reports
 		LOGGER.info("Generating report reasons");
 		List<ReportReason> reasons = new ArrayList<>();
@@ -166,7 +192,6 @@ public class ForumApplication {
 
 			LOGGER.info("Generating between " + minPostsPerTopicToGenerate + " and " + maxPostsPerTopicToGenerate + " posts");
 			long totalReportReasons = reportReasonRepository.count();
-			List<Post> posts = new ArrayList<>();
 			int numPosts = new Random().nextInt(maxPostsPerTopicToGenerate - minPostsPerTopicToGenerate) + minPostsPerTopicToGenerate;
 			for (int i = 0; i < numPosts; i++) {
 				Post p = new Post();
@@ -183,7 +208,7 @@ public class ForumApplication {
 				if (random == 1) {
 					p.setUpdatedAt(faker.date().between(start, end));
 				}
-
+				postRepository.save(p);
 				// On ajoute de l'aléatoire sur le nombre de report par Post
 				List<Report> reports = new ArrayList<>();
 				int randomReport = (int) (Math.random() * 4);
@@ -193,15 +218,14 @@ public class ForumApplication {
 					while (randomAuthor == randomAuthorReport) {
 						randomAuthorReport = (long) (Math.random() * totalUsers) + 1;
 					}
+					r.setPost(p);
 					r.setAuthor(userRepository.getById(randomAuthorReport));
 					r.setReason(reportReasonRepository.getById((long) (Math.random() * totalReportReasons) + 1));
 					reports.add(r);
 				}
 				reportRepository.saveAll(reports);
-				p.setReports(reports);
-				posts.add(p);
 			}
-			postRepository.saveAll(posts);
+			
 		}
 	}
 

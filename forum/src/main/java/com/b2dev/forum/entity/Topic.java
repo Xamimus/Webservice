@@ -34,8 +34,4 @@ public class Topic {
   public User getAuthor() {
     return author;
   }
-
-  public Boolean getLocked() {
-    return locked;
-  }
 }
