@@ -28,6 +28,7 @@ public class ReportController {
     @Autowired
     private PostRepository postRepository;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     @GetMapping
     public Page<Report> getReports(Pageable pageable) {
         return reportRepository.findAll(pageable);

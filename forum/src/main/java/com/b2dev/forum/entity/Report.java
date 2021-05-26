@@ -21,7 +21,7 @@ public class Report {
   @ManyToOne
   private User author;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   private ReportReason reason;
 
   @ManyToOne
