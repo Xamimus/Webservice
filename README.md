@@ -54,10 +54,12 @@ Un jeu de fausses données est également importé
 ## Comptes mis à disposition
 
 Des comptes pour les 4 niveaux de permissions sont mis à disposition, afin de tester facilement la gestion de ces dernières.
+Les mots de passes pour les 4 comptes sont : '1234'
 
-| ANONYMOUS | USER | MODERATOR | ADMIN |
-|:----------:|:----------:|:----------:| 
-| anonymous@test | user@test | moderator@test | admin@test |
+- Anonyme : anonymous@test
+- User : user@test
+- Modérateur : moderator@test
+- Admin : admin@test
 
 ### Importer un fichier JSON sur Postman
 
