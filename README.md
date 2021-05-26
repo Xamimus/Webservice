@@ -1,5 +1,12 @@
 # Rendu Webservice (Eliott CLAVIER / Maxime MARTIN / Florent CHABIN / Nathan PIGNON)
 
+# Ressources
+
+- Dossiers du projet (dans ce repo Git)
+- Collection de requêtes PostMan (à la racine de ce repository)
+- ReadMe (Vous y êtes)
+- Le Dump SQL est inclus dans le code source (cf 'Dump SQL / Gestion des données')
+
 # Mise en place de l'environnement
 
 ### Importer le projet
@@ -50,6 +57,9 @@ Lancer le projet
 Les tables ainsi que leur descriptions sont automatiquement importées dans la base de données "webservice"
 
 Un jeu de fausses données est également importé, remplissant la base de données avec des entités semblant réalistes, à l'aide du composant Faker.
+A l'initialisaion du projet, la variable globale 'populateDb', se trouvant dans le fichier application.properties est réglé sur 'True', permettant ainsi cette génération.
+
+Il est conseillé de le régler sur 'False' une fois les données générées.
 
 ## Comptes mis à disposition
 
@@ -67,7 +77,7 @@ La connexion vous mettra à disposition un Token JWT permettant l'authentificati
 
 Pour les besoins du test, l'expiration des tokens a été considérablement rallongée, afin de faciliter les requêtes de notre collection Postman.
 
-### Importer un fichier JSON sur Postman
+## Importer un fichier JSON sur Postman
 
 Cliquer sur "Import" (en haut à gauche)
 
