@@ -10,6 +10,8 @@ import com.b2dev.forum.entity.Topic;
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
 
+    Topic getById(long id);
+
     Topic findById(long id);
 
     Void deleteById(long id);
