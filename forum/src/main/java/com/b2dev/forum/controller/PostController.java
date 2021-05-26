@@ -69,7 +69,7 @@ public class PostController {
                 updatePost.setContent(post.getContent());
             }
             updatePost.setUpdatedAt(new Date());
-            return ResponseEntity.ok(postRepository.save(post));
+            return ResponseEntity.ok(postRepository.save(updatePost));
         }
         return ResponseEntity.badRequest().build();
     }
