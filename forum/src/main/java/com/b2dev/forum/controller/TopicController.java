@@ -71,8 +71,7 @@ public class TopicController {
             assert false;
             posts.add(p);
         }
-
-        Category category = categoryRepository.findById(topic.getCategory().getId());
+        Category category = categoryRepository.getById(topic.getCategory().getId());
         topicToSave.setCategory(category);
         topicToSave.setPosts(posts);
         topicToSave.setAuthor(author);
