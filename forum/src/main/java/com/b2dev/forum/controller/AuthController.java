@@ -72,7 +72,7 @@ public class AuthController {
       return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
     } catch (AuthenticationException e) {
       return ResponseEntity.ok(new MessageResponse(ApiMessage.ERROR_LOGIN_FAILED, "Identifiants invalides"));
-    }
+    } 
   }
 
   @PostMapping("register")

@@ -48,6 +48,7 @@ public class TopicController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER')")
     @PostMapping("")
     public Topic addTopic(@RequestBody Topic topic) {
         Topic topicToSave = new Topic();
