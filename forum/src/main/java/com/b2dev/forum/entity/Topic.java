@@ -31,6 +31,9 @@ public class Topic {
   @ManyToOne
   private User author;
 
+  @OneToMany
+  private List<Post> posts;
+
 
   public User getAuthor() {
     return author;

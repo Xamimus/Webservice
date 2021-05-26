@@ -1,36 +1,24 @@
 package com.b2dev.forum.controller;
 
-<<<<<<< HEAD
-import com.b2dev.forum.entity.EnumRole;
 import com.b2dev.forum.entity.Post;
-=======
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.b2dev.forum.entity.*;
->>>>>>> main
 import com.b2dev.forum.security.service.UserDetailsServiceImpl;
-import net.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-<<<<<<< HEAD
-import org.springframework.data.domain.Sort;
-=======
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
->>>>>>> main
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import net.minidev.json.JSONObject;
-
 import com.b2dev.forum.repository.PostRepository;
 import com.b2dev.forum.repository.TopicRepository;
-import com.b2dev.forum.repository.PostRepository;
-
-import java.util.List;
-import java.util.Optional;
+import com.b2dev.forum.repository.UserRepository;
 
 
 @RestController
@@ -42,6 +30,9 @@ public class TopicController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @ResponseBody
     @GetMapping
@@ -70,8 +61,15 @@ public class TopicController {
     public ResponseEntity<Topic> addTopic(@RequestBody Topic topic) {
         Topic topicToSave = new Topic();
         topicToSave.setTitle(topic.getTitle());
-        topicToSave.setPosts(topic.getPosts());
-        topicToSave.setAuthor(topic.getAuthor());
+        User author = userRepository.getById(topic.getAuthor().getId());
+        ArrayList<Post> posts = new ArrayList<Post>();
+        for(Post p : topic.getPosts()){
+            p = postRepository.findById(p.getId());
+            assert false;
+            posts.add(p);
+        }
+        topicToSave.setPosts(posts);
+        topicToSave.setAuthor(author);
         topicToSave.setLocked(false);
         if(topicToSave.getTitle() == null || topicToSave.getPosts().size() < 1){
             return ResponseEntity.badRequest().build();
