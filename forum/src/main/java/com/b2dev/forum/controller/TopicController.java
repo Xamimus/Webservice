@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.b2dev.forum.entity.*;
+import com.b2dev.forum.repository.CategoryRepository;
 import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,8 @@ public class TopicController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @ResponseBody
     @GetMapping
@@ -68,6 +71,9 @@ public class TopicController {
             assert false;
             posts.add(p);
         }
+
+        Category category = categoryRepository.findById(topic.getCategory().getId());
+        topicToSave.setCategory(category);
         topicToSave.setPosts(posts);
         topicToSave.setAuthor(author);
         topicToSave.setLocked(false);
