@@ -55,7 +55,9 @@ Un jeu de fausses données est également importé
 
 Des comptes pour les 4 niveaux de permissions sont mis à disposition, afin de tester facilement la gestion de ces dernières.
 
-| ANONYMOUS | USER | MODERATOR | ADMIN | |:----------:|:----------:|:----------:| | anonymous@test | user@test | moderator@test | admin@test |
+| ANONYMOUS | USER | MODERATOR | ADMIN |
+|:----------:|:----------:|:----------:| 
+| anonymous@test | user@test | moderator@test | admin@test |
 
 ### Importer un fichier JSON sur Postman
 
