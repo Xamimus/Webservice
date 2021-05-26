@@ -9,12 +9,10 @@ import com.b2dev.forum.entity.EnumRole;
 import com.b2dev.forum.entity.Role;
 import com.b2dev.forum.repository.RoleRepository;
 import com.b2dev.forum.repository.UserRepository;
-import com.b2dev.forum.security.service.UserDetailsServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

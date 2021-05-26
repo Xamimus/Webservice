@@ -102,6 +102,7 @@ public class ForumApplication {
 		}
 
 		Role adminRole = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
+		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
 		if (userRepository.count() == 0)
 		{
 			// Création d'un utilisateur spécial ayant le rôle d'Administrateur,
@@ -125,9 +126,20 @@ public class ForumApplication {
 			anonymousRoles.add(anonymousRole);
 			anonymous.setRoles(anonymousRoles);
 			userRepository.save(anonymous);
+
+			// Création d'un User à des fins de test
+			User simpleUser = new User();
+			simpleUser.setEmail("user@test");
+			simpleUser.setPassword(encoder.encode("1234"));
+
+			Role simpleUserRole = roleRepository.save(new Role(EnumRole.ROLE_USER));
+			Set<Role> simpleUserRoles = new HashSet<>();
+			simpleUserRoles.add(simpleUserRole);
+			simpleUser.setRoles(simpleUserRoles);
+			userRepository.save(simpleUser);
 		}
 
-		Role userRole = roleRepository.findByName(EnumRole.ROLE_USER).get();
+		
 		// Création des raisons de reports
 		LOGGER.info("Generating report reasons");
 		List<ReportReason> reasons = new ArrayList<>();
